@@ -1,4 +1,9 @@
-spring:
+logging:
+  level:
+    root: info
+    com.psc.sample: debug
+
+ spring:
   batch:
     job:
       names: ${job.name:NONE}
@@ -14,7 +19,3 @@ spring:
     url: jdbc:mysql://localhost:3306/batch_test
     username: jytest
     password: test11!!
-  logging:
-    level:
-      root: info
-      com.psc.sample: debug
