@@ -3,7 +3,7 @@ logging:
     root: info
     com.psc.sample: debug
 
- spring:
+spring:
   batch:
     job:
       names: ${job.name:NONE}
