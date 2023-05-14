@@ -40,8 +40,15 @@ public class JpaPageJob2 {
         return stepBuilderFactory.get("JJpaPageJob2_step1")
                 .<Dept, Dept2>chunk(chunkSize)
                 .reader(jpaPageJob2_dbItemReader())
+                .processor(jpaPageJob2_processor())
                 .writer(jpaPageJob2_dbItemWriter())
                 .build();
+    }
+
+    private ItemProcessor<Dept,Dept2> jpaPageJob2_processor() {
+        return dept -> {
+            return new Dept2(dept.getDeptNo(),"NEW_"+dept.getDName(),"NEW_"+dept.getLoc());
+        };
     }
 
     @Bean
