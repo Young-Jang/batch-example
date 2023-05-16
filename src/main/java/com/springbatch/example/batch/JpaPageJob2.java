@@ -27,7 +27,7 @@ public class JpaPageJob2 {
     private final StepBuilderFactory stepBuilderFactory;
     private final EntityManagerFactory entityManagerFactory;
 
-    private int chunkSize = 10;
+    private int chunkSize = 100;
 
     @Bean
     public Job JpaPageJob2_batchBuild(){
