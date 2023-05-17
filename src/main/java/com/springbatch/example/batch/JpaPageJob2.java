@@ -2,6 +2,8 @@ package com.springbatch.example.batch;
 
 import com.springbatch.example.domain.Dept;
 import com.springbatch.example.domain.Dept2;
+import com.springbatch.example.domain.Dept2Repository;
+import com.springbatch.example.domain.DeptRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
@@ -9,10 +11,10 @@ import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.item.ItemProcessor;
-import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.database.JpaItemWriter;
 import org.springframework.batch.item.database.JpaPagingItemReader;
 import org.springframework.batch.item.database.builder.JpaPagingItemReaderBuilder;
+import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -26,13 +28,15 @@ public class JpaPageJob2 {
     private final JobBuilderFactory jobBuilderFactory;
     private final StepBuilderFactory stepBuilderFactory;
     private final EntityManagerFactory entityManagerFactory;
+    private final Dept2Repository dept2Repository;
 
     private int chunkSize = 100;
 
     @Bean
     public Job JpaPageJob2_batchBuild(){
         return jobBuilderFactory.get("JpaPageJob2")
-                .start(JpaPageJob2_step1()).build();
+                .start(JpaPageJob2_step2())
+                .next(JpaPageJob2_step1()).build();
     }
 
     @Bean
@@ -44,6 +48,17 @@ public class JpaPageJob2 {
                 .writer(jpaPageJob2_dbItemWriter())
                 .build();
     }
+
+
+    @Bean
+    public Step JpaPageJob2_step2(){
+        return stepBuilderFactory.get("JJpaPageJob2_step2")
+                .tasklet((a, b)->{
+                    dept2Repository.deleteAll();
+                    return RepeatStatus.FINISHED;
+                }).build();
+    }
+
 
     private ItemProcessor<Dept,Dept2> jpaPageJob2_processor() {
         return dept -> {
