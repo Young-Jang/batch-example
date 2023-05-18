@@ -30,7 +30,7 @@ public class JpaPageJob2 {
     private final EntityManagerFactory entityManagerFactory;
     private final Dept2Repository dept2Repository;
 
-    private int chunkSize = 100;
+    private int chunkSize = 10;
 
     @Bean
     public Job JpaPageJob2_batchBuild(){
@@ -41,7 +41,7 @@ public class JpaPageJob2 {
 
     @Bean
     public Step JpaPageJob2_step1(){
-        return stepBuilderFactory.get("JJpaPageJob2_step1")
+        return stepBuilderFactory.get("JpaPageJob2_step1")
                 .<Dept, Dept2>chunk(chunkSize)
                 .reader(jpaPageJob2_dbItemReader())
                 .processor(jpaPageJob2_processor())
@@ -52,7 +52,7 @@ public class JpaPageJob2 {
 
     @Bean
     public Step JpaPageJob2_step2(){
-        return stepBuilderFactory.get("JJpaPageJob2_step2")
+        return stepBuilderFactory.get("JpaPageJob2_step2")
                 .tasklet((a, b)->{
                     dept2Repository.deleteAll();
                     return RepeatStatus.FINISHED;
@@ -72,7 +72,7 @@ public class JpaPageJob2 {
                 .name("jpaPageJob1_dbItemReader")
                 .entityManagerFactory(entityManagerFactory)
                 .pageSize(chunkSize)
-                .queryString("SELECT d FROM Dept d order by dept_no asc")
+                .queryString("SELECT d FROM Dept d order by dept_no desc")
                 .build();
     }
 
