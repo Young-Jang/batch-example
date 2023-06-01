@@ -2,7 +2,6 @@ logging:
   level:
     root: info
     com.psc.sample: debug
-
 spring:
   batch:
     job:
