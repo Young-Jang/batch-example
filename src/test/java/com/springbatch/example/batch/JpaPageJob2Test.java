@@ -39,9 +39,9 @@ public class JpaPageJob2Test {
         // Given
         // 데이터베이스에 테스트를 위한 Dept 엔티티를 저장합니다.
         Dept dept1 = new Dept(1, "Dept1", "Location1");
-        Dept2 dept2 = new Dept2(2, "Dept2", "Location2");
+        Dept dept2 = new Dept(2, "Dept2", "Location2");
         deptRepository.save(dept1);
-        dept2Repository.save(dept2);
+        deptRepository.save(dept2);
 
         JobParameters jobParameters = new JobParametersBuilder()
                 .addLong("time", System.currentTimeMillis())
